@@ -54,7 +54,8 @@ function! ConfigProject()
 	endif
 
 	if exists("g:project_chdir_root") && g:project_chdir_root == "true" && exists(g:project_type)
-	exe 'lcd' g:project_root
+		exe 'lcd' g:project_root
+	endif
 endfunction
 
 au BufEnter * call ConfigProject()
