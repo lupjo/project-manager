@@ -29,6 +29,13 @@ function! DuneConfig()
 		map <buffer> <space>mc <Cmd>make clean<CR>
 endfunction
 
+function! MakeConfig()
+		setlocal makeprg=make
+		map <buffer> <space>mm <Cmd>make<CR>
+		map <buffer> <space>mt <Cmd>make test<CR>
+		map <buffer> <space>mc <Cmd>make clean<CR>
+endfunction
+
 let g:project_chdir_root = "true"
 
 function! ConfigProject()
@@ -37,7 +44,16 @@ function! ConfigProject()
 	if !empty(g:project_root)
 		let g:project_type = 'dune'
 		call DuneConfig()
+	else
+		" Try Makefile
+		let g:project_root = FindProjectRoot('Makefile')
+		if !empty(g:project_root)
+			let g:project_type = 'make'
+			call MakeConfig()
+		endif
 	endif
+
+	if exists("g:project_chdir_root") && g:project_chdir_root == "true" && exists(g:project_type)
 	exe 'lcd' g:project_root
 endfunction
 
