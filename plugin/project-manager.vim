@@ -53,7 +53,7 @@ function! ConfigProject()
 		endif
 	endif
 
-	if exists("g:project_chdir_root") && g:project_chdir_root == "true" && exists(g:project_type)
+	if exists("g:project_chdir_root") && g:project_chdir_root == "true" && exists("g:project_type")
 		exe 'lcd' g:project_root
 	endif
 endfunction
