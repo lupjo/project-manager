@@ -33,13 +33,13 @@ function! FindProjectRoot()
         let checkdune=expand(pathMaker).'/dune-project'
         if filereadable(checkdune)||isdirectory(checkdune)
             let g:project_type = 'dune'
-            DuneConfig ()
+            call DuneConfig()
             return expand(pathMaker)
         endif
         let checkmake=expand(pathMaker).'/Makefile'
         if filereadable(checkmake)||isdirectory(checkmake)
             let g:project_type = 'make'
-            MakeConfig ()
+            call MakeConfig ()
             return expand(pathMaker)
         endif
     endwhile
