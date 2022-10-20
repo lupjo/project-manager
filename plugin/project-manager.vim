@@ -9,18 +9,7 @@ endif
 let g:project_manager = 1
 
 
-"""""""""" Project handling
-function! FindProjectRoot(lookFor)
-    let pathMaker='%:p'
-    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
-        let pathMaker=pathMaker.':h'
-        let fileToCheck=expand(pathMaker).'/'.a:lookFor
-        if filereadable(fileToCheck)||isdirectory(fileToCheck)
-            return expand(pathMaker)
-        endif
-    endwhile
-    return ""
-endfunction
+
 
 function! DuneConfig()
 		setlocal makeprg=dune
@@ -36,23 +25,31 @@ function! MakeConfig()
 		map <buffer> <space>mc <Cmd>make clean<CR>
 endfunction
 
+
+function! FindProjectRoot()
+    let pathMaker='%:p'
+    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+        let pathMaker=pathMaker.':h'
+        let checkdune=expand(pathMaker).'/dune-project'
+        if filereadable(checkdune)||isdirectory(checkdune)
+            let g:project_type = 'dune'
+            DuneConfig ()
+            return expand(pathMaker)
+        endif
+        let checkmake=expand(pathMaker).'/Makefile'
+        if filereadable(checkmake)||isdirectory(checkmake)
+            let g:project_type = 'make'
+            MakeConfig ()
+            return expand(pathMaker)
+        endif
+    endwhile
+    return ""
+endfunction
+
 let g:project_chdir_root = "true"
 
 function! ConfigProject()
-	" Try dune
-	let g:project_root = FindProjectRoot('dune-project')
-	if !empty(g:project_root)
-		let g:project_type = 'dune'
-		call DuneConfig()
-	else
-		" Try Makefile
-		let g:project_root = FindProjectRoot('Makefile')
-		if !empty(g:project_root)
-			let g:project_type = 'make'
-			call MakeConfig()
-		endif
-	endif
-
+	let g:project_root = FindProjectRoot()
 	if exists("g:project_chdir_root") && g:project_chdir_root == "true" && exists("g:project_type")
 		exe 'lcd' g:project_root
 	endif
