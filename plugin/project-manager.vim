@@ -1,6 +1,6 @@
 " Title: Project Manager
-" Author: Lou Noizet
-" Maintainer: Lou Noizet (lou@noizet.fr)
+" Author: Victoire Noizet
+" Maintainer: Victoire Noizet (Victoire@noizet.fr)
 " Description: This plugin tries to find the project root. It is very basic
 
 if exists("g:project_manager")
